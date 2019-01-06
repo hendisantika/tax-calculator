@@ -32,10 +32,6 @@ import java.util.Map;
 public class TaxService {
     private static Logger log = LoggerFactory.getLogger(TaxService.class);
 
-    private static List<TaxDTO> taxDTOList = new ArrayList<>();
-
-    private static List<TaxDTO> taxDTOListTemp = new ArrayList<>();
-
     private static Map<String, List<TaxDTO>> reqMap = new HashMap<>();
 
     @Autowired
