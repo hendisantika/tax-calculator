@@ -42,9 +42,44 @@ public class TaxService {
     TaxRepository taxRepository;
 
     public Tax saveTax(TaxDTO taxDTO) {
-
         Tax tax = new Tax();
-        Integer type = taxDTO.getTaxCode();
+        log.info("Data tax --> {}", taxDTO);
+        BeanUtils.copyProperties(taxDTO, tax);
+        return taxRepository.save(tax);
+    }
+
+    public List<TaxDTO> addTaxItem(TaxDTO taxDTO, String requestId) {
+        List<TaxDTO> taxDTOListTemp = new ArrayList<>();
+        if (requestId == null) {
+            requestId = RequestIDGenerator.getID();
+            Integer type = taxDTO.getTaxCode();
+            checkType(taxDTO, type);
+
+            taxDTOListTemp.add(taxDTO);
+            countAll(taxDTOListTemp);
+            setReqMap(requestId, taxDTOListTemp);
+        } else {
+            Integer type = taxDTO.getTaxCode();
+            checkType(taxDTO, type);
+            if (reqMap.containsKey(requestId)) {
+                taxDTOListTemp = reqMap.get(requestId);
+                taxDTOListTemp.add(taxDTO);
+                countAll(taxDTOListTemp);
+                setReqMap(requestId, taxDTOListTemp);
+            }
+
+        }
+
+        return taxDTOListTemp;
+    }
+
+    private void setReqMap(String requestId, List<TaxDTO> taxDTOListTemp) {
+        reqMap.put(requestId, taxDTOListTemp);
+        reqMap.forEach((k, v) -> log.info("UUID : " + k + " Data : " + v));
+        log.info("Jumlah Data --> {}", reqMap.size());
+    }
+
+    private void checkType(TaxDTO taxDTO, Integer type) {
         switch (type) {
             case 1:
                 taxDTO.setType("Food & Beverage");
@@ -66,79 +101,6 @@ public class TaxService {
                 taxDTO.setAmount(sumAmount(taxDTO.getPrice(), taxDTO.getTax()));
                 break;
         }
-        log.info("Data tax --> {}", taxDTO);
-        BeanUtils.copyProperties(taxDTO, tax);
-
-        return taxRepository.save(tax);
-    }
-
-    public List<TaxDTO> addTaxItem(TaxDTO taxDTO, String requestId) {
-        List<TaxDTO> taxDTOListTemp = new ArrayList<>();
-        if (requestId == null) {
-            requestId = RequestIDGenerator.getID();
-            Integer type = taxDTO.getTaxCode();
-            switch (type) {
-                case 1:
-                    taxDTO.setType("Food & Beverage");
-                    taxDTO.setRefundable(true);
-                    taxDTO.setTax(countTax(taxDTO.getPrice(), taxDTO.getTaxCode()));
-                    taxDTO.setAmount(sumAmount(taxDTO.getPrice(), taxDTO.getTax()));
-                    break;
-                case 2:
-                    taxDTO.setType("Tobacco");
-                    taxDTO.setRefundable(false);
-                    taxDTO.setTax(countTax(taxDTO.getPrice(), taxDTO.getTaxCode()));
-                    taxDTO.setAmount(sumAmount(taxDTO.getPrice(), taxDTO.getTax()));
-                    break;
-
-                case 3:
-                    taxDTO.setType("Entertainment");
-                    taxDTO.setRefundable(false);
-                    taxDTO.setTax(countTax(taxDTO.getPrice(), taxDTO.getTaxCode()));
-                    taxDTO.setAmount(sumAmount(taxDTO.getPrice(), taxDTO.getTax()));
-                    break;
-            }
-
-            taxDTOListTemp.add(taxDTO);
-            countAll(taxDTOListTemp);
-            reqMap.put(requestId, taxDTOListTemp);
-            reqMap.forEach((k, v) -> log.info("UUID : " + k + " Data : " + v));
-            log.info("Jumlah Data --> {}", reqMap.size());
-        } else {
-            Integer type = taxDTO.getTaxCode();
-            switch (type) {
-                case 1:
-                    taxDTO.setType("Food & Beverage");
-                    taxDTO.setRefundable(true);
-                    taxDTO.setTax(countTax(taxDTO.getPrice(), taxDTO.getTaxCode()));
-                    taxDTO.setAmount(sumAmount(taxDTO.getPrice(), taxDTO.getTax()));
-                    break;
-                case 2:
-                    taxDTO.setType("Tobacco");
-                    taxDTO.setRefundable(false);
-                    taxDTO.setTax(countTax(taxDTO.getPrice(), taxDTO.getTaxCode()));
-                    taxDTO.setAmount(sumAmount(taxDTO.getPrice(), taxDTO.getTax()));
-                    break;
-
-                case 3:
-                    taxDTO.setType("Entertainment");
-                    taxDTO.setRefundable(false);
-                    taxDTO.setTax(countTax(taxDTO.getPrice(), taxDTO.getTaxCode()));
-                    taxDTO.setAmount(sumAmount(taxDTO.getPrice(), taxDTO.getTax()));
-                    break;
-            }
-            if (reqMap.containsKey(requestId)) {
-                taxDTOListTemp = reqMap.get(requestId);
-                taxDTOListTemp.add(taxDTO);
-                countAll(taxDTOListTemp);
-                reqMap.put(requestId, taxDTOListTemp);
-                reqMap.forEach((k, v) -> log.info("UUID : " + k + " Data : " + v));
-                log.info("Jumlah Data --> {}", reqMap.size());
-            }
-
-        }
-
-        return taxDTOListTemp;
     }
 
 
