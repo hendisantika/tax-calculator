@@ -11,14 +11,19 @@ Simple Tax Calculator using Spring Boot MySQL Docker Compose
 
 ![Swagger UI](img/SwaggerUI.png "Swagger UI")
 
-For the first time request just
+For the first time request just add the tax json request :
 
+![First Tax Request](img/add1.png "First Tax Request")
 
+For next request We need requestId to differentiate whose session user is this and whose item list is this.
 
+![Second Tax Request](img/add2.png "Second Tax Request")
 
+![Third Tax Request](img/add3.png "Third Tax Request")
 
+Get All Tax List
 
-
+![Get All Tax List](img/add3.png "Get All Tax List")
 
 
 ### Things to do to run with Docker :
