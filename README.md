@@ -6,8 +6,10 @@ Simple Tax Calculator using Spring Boot MySQL Docker Compose
 
 1. Clone this project by this command : `git clone https://github.com/hendisantika/tax-calculator.git`
 2. Go to folder --> `cd tax-calculator`
-3. Run this project with Maven Wrapper --> `./mvnw clean spring-boot:run`
-4. Open Swagger UI Dashboard on this link http://localhost:8080/swagger-ui.html and see the following screen shot:
+3. If the MySQL container is not up and running, you need to run it now.
+4. Change [application.properties](./src/main/resources/application.properties) based on your mysql username & password.
+5. Run this project with Maven Wrapper --> `./mvnw clean spring-boot:run`
+6. Open Swagger UI Dashboard on this link http://localhost:8080/swagger-ui.html and see the following screen shot:
 
 ![Swagger UI](img/SwaggerUI.png "Swagger UI")
 
@@ -50,7 +52,6 @@ Get All Tax List
 
    `docker ps`
 
-   If the MySQL container is not up and running, you need to run it now.
 
 5. Link with MySQL Container.
 
