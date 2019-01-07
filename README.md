@@ -2,7 +2,19 @@
 
 Simple Tax Calculator using Spring Boot MySQL Docker Compose
 
-### Things to do :
+### Things to do to run without Docker (locally):
+
+1. Clone this project by this command : `git clone https://github.com/hendisantika/tax-calculator.git`
+2. Go to folder --> `cd tax-calculator`
+3. Run this project with Maven Wrapper --> `./mvnw clean spring-boot:run`
+4. Open POSTMAN and see the following screen shot:
+
+
+
+
+
+
+### Things to do to run with Docker :
 
 1. Building the docker image from project
 
