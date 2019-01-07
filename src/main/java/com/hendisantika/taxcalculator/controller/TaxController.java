@@ -2,6 +2,7 @@ package com.hendisantika.taxcalculator.controller;
 
 import com.hendisantika.taxcalculator.domain.Tax;
 import com.hendisantika.taxcalculator.dto.TaxDTO;
+import com.hendisantika.taxcalculator.dto.UserItem;
 import com.hendisantika.taxcalculator.service.TaxService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,9 +39,8 @@ public class TaxController {
     }
 
     @GetMapping("add")
-    List<TaxDTO> addTaxItemList(@RequestBody TaxDTO taxDTO, @RequestParam(value = "requestId", required = false) final String requestId) {
+    UserItem addTaxItemList(@RequestBody TaxDTO taxDTO, @RequestParam(value = "requestId", required = false) final String requestId) {
         return taxService.addTaxItem(taxDTO, requestId);
-
     }
 
     @PostMapping

@@ -3,6 +3,7 @@ package com.hendisantika.taxcalculator.service;
 import com.hendisantika.taxcalculator.domain.Tax;
 import com.hendisantika.taxcalculator.dto.TaxDTO;
 import com.hendisantika.taxcalculator.dto.TotalDTO;
+import com.hendisantika.taxcalculator.dto.UserItem;
 import com.hendisantika.taxcalculator.repository.TaxRepository;
 import com.hendisantika.taxcalculator.utils.RequestIDGenerator;
 import org.slf4j.Logger;
@@ -44,7 +45,34 @@ public class TaxService {
         return taxRepository.save(tax);
     }
 
-    public List<TaxDTO> addTaxItem(TaxDTO taxDTO, String requestId) {
+//    public List<TaxDTO> addTaxItem(TaxDTO taxDTO, String requestId) {
+//        List<TaxDTO> taxDTOListTemp = new ArrayList<>();
+//        if (requestId == null) {
+//            requestId = RequestIDGenerator.getID();
+//            Integer type = taxDTO.getTaxCode();
+//            checkType(taxDTO, type);
+//
+//            taxDTOListTemp.add(taxDTO);
+//            countAll(taxDTOListTemp);
+//            setReqMap(requestId, taxDTOListTemp);
+//        } else {
+//            Integer type = taxDTO.getTaxCode();
+//            checkType(taxDTO, type);
+//            if (reqMap.containsKey(requestId)) {
+//                taxDTOListTemp = reqMap.get(requestId);
+//                taxDTOListTemp.add(taxDTO);
+//                countAll(taxDTOListTemp);
+//                setReqMap(requestId, taxDTOListTemp);
+//            }
+//
+//        }
+//
+//        return taxDTOListTemp;
+//    }
+
+    public UserItem addTaxItem(TaxDTO taxDTO, String requestId) {
+        UserItem userItem = new UserItem();
+        TotalDTO totalDTO = new TotalDTO();
         List<TaxDTO> taxDTOListTemp = new ArrayList<>();
         if (requestId == null) {
             requestId = RequestIDGenerator.getID();
@@ -52,38 +80,50 @@ public class TaxService {
             checkType(taxDTO, type);
 
             taxDTOListTemp.add(taxDTO);
-            countAll(taxDTOListTemp);
-            setReqMap(requestId, taxDTOListTemp);
+            totalDTO = countAll(taxDTOListTemp);
+            setReqMap(userItem, requestId, taxDTOListTemp, totalDTO);
+
+
         } else {
             Integer type = taxDTO.getTaxCode();
             checkType(taxDTO, type);
             if (reqMap.containsKey(requestId)) {
                 taxDTOListTemp = reqMap.get(requestId);
                 taxDTOListTemp.add(taxDTO);
-                countAll(taxDTOListTemp);
-                setReqMap(requestId, taxDTOListTemp);
+                totalDTO = countAll(taxDTOListTemp);
+                setReqMap(userItem, requestId, taxDTOListTemp, totalDTO);
             }
 
         }
 
-        return taxDTOListTemp;
+        return userItem;
     }
 
-    private void setReqMap(String requestId, List<TaxDTO> taxDTOListTemp) {
+    private void setReqMap(UserItem userItem, String requestId, List<TaxDTO> taxDTOListTemp, TotalDTO totalDTO) {
         reqMap.put(requestId, taxDTOListTemp);
         reqMap.forEach((k, v) -> log.info("UUID : " + k + " Data : " + v));
         log.info("Jumlah Data --> {}", reqMap.size());
+        reqMap.forEach((k, v) -> {
+            log.info("Item : " + k + " Count : " + v);
+            userItem.setId(RequestIDGenerator.getID());
+            userItem.setItems(taxDTOListTemp);
+            userItem.setUserId(requestId);
+            userItem.setTotalDTO(totalDTO);
+        });
+        log.info("User Item --> {}", userItem);
     }
 
     private void checkType(TaxDTO taxDTO, Integer type) {
         switch (type) {
             case 1:
+                taxDTO.setId(RequestIDGenerator.getID());
                 taxDTO.setType("Food & Beverage");
                 taxDTO.setRefundable(true);
                 taxDTO.setTax(countTax(taxDTO.getPrice(), taxDTO.getTaxCode()));
                 taxDTO.setAmount(sumAmount(taxDTO.getPrice(), taxDTO.getTax()));
                 break;
             case 2:
+                taxDTO.setId(RequestIDGenerator.getID());
                 taxDTO.setType("Tobacco");
                 taxDTO.setRefundable(false);
                 taxDTO.setTax(countTax(taxDTO.getPrice(), taxDTO.getTaxCode()));
@@ -91,6 +131,7 @@ public class TaxService {
                 break;
 
             case 3:
+                taxDTO.setId(RequestIDGenerator.getID());
                 taxDTO.setType("Entertainment");
                 taxDTO.setRefundable(false);
                 taxDTO.setTax(countTax(taxDTO.getPrice(), taxDTO.getTaxCode()));
