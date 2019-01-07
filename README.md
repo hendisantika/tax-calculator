@@ -8,7 +8,7 @@ Simple Tax Calculator using Spring Boot MySQL Docker Compose
 
    first you need to build the application. This can be done with following command
 
-   `mvn clean install`
+   `./mvnw clean install`
 
 2. Once the project is buit successfully, we can build the docker image with following command.
 
@@ -45,6 +45,6 @@ Simple Tax Calculator using Spring Boot MySQL Docker Compose
    **login to container with bash mode**
 
    `docker exec -it tax-calculator-container bash`
-   tax-calucator-container is the name of the container that we need to access.  bash param says that we need the bash access.
+   tax-calculator-container is the name of the container that we need to access.  bash param says that we need the bash access.
 
    see the content of /etc/hosts ( cat /etc/hosts )

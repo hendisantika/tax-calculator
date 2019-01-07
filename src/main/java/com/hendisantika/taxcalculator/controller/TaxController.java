@@ -7,11 +7,9 @@ import com.hendisantika.taxcalculator.service.TaxService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Created by IntelliJ IDEA.
@@ -32,28 +30,13 @@ public class TaxController {
     TaxService taxService;
 
     @GetMapping
-    List<Tax> getTaxList() {
-        logger.info("Data --> {}", taxService.getTaxList());
-        return taxService.getTaxList();
-
+    Page<Tax> getTaxList(Pageable pageable) {
+        return taxService.getTaxList(pageable);
     }
 
     @GetMapping("add")
     UserItem addTaxItemList(@RequestBody TaxDTO taxDTO, @RequestParam(value = "requestId", required = false) final String requestId) {
         return taxService.addTaxItem(taxDTO, requestId);
     }
-
-    @PostMapping
-    Tax saveTax(@RequestBody TaxDTO taxDTO) {
-        Set<TaxDTO> taxDTOSet = new HashSet<TaxDTO>();
-//        for (Long productId:productIds){
-//            taxDTOSet.add(productRepository.findOne(productId));
-//        }
-        Double total = 0.0;
-        logger.info("Save Data --> {}", taxDTO);
-        return taxService.saveTax(taxDTO);
-
-    }
-
 
 }

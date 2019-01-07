@@ -20,9 +20,10 @@ import java.util.List;
 @Data
 public class UserItem {
     private static final long serialVersionUID = 1L;
-    List<TaxDTO> items = new ArrayList<>();
-    TotalDTO totalDTO;
+
     @Id
     private String id;
     private String userId;
+    List<TaxDTO> items = new ArrayList<>();
+    TotalDTO totalDTO;
 }

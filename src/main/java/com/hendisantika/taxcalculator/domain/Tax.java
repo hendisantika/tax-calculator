@@ -28,6 +28,8 @@ public class Tax implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long taxId;
 
+    private String userId;
+
     private String name;
 
     private Integer taxCode;

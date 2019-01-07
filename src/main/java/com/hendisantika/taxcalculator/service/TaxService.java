@@ -8,8 +8,9 @@ import com.hendisantika.taxcalculator.repository.TaxRepository;
 import com.hendisantika.taxcalculator.utils.RequestIDGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,41 +39,15 @@ public class TaxService {
     @Autowired
     TaxRepository taxRepository;
 
-    public Tax saveTax(TaxDTO taxDTO) {
-        Tax tax = new Tax();
-        log.info("Data tax --> {}", taxDTO);
-        BeanUtils.copyProperties(taxDTO, tax);
+    public Tax saveTax(Tax tax) {
+        log.info("Data tax --> {}", tax);
         return taxRepository.save(tax);
     }
 
-//    public List<TaxDTO> addTaxItem(TaxDTO taxDTO, String requestId) {
-//        List<TaxDTO> taxDTOListTemp = new ArrayList<>();
-//        if (requestId == null) {
-//            requestId = RequestIDGenerator.getID();
-//            Integer type = taxDTO.getTaxCode();
-//            checkType(taxDTO, type);
-//
-//            taxDTOListTemp.add(taxDTO);
-//            countAll(taxDTOListTemp);
-//            setReqMap(requestId, taxDTOListTemp);
-//        } else {
-//            Integer type = taxDTO.getTaxCode();
-//            checkType(taxDTO, type);
-//            if (reqMap.containsKey(requestId)) {
-//                taxDTOListTemp = reqMap.get(requestId);
-//                taxDTOListTemp.add(taxDTO);
-//                countAll(taxDTOListTemp);
-//                setReqMap(requestId, taxDTOListTemp);
-//            }
-//
-//        }
-//
-//        return taxDTOListTemp;
-//    }
-
     public UserItem addTaxItem(TaxDTO taxDTO, String requestId) {
         UserItem userItem = new UserItem();
-        TotalDTO totalDTO = new TotalDTO();
+        TotalDTO totalDTO;
+        Tax tax = new Tax();
         List<TaxDTO> taxDTOListTemp = new ArrayList<>();
         if (requestId == null) {
             requestId = RequestIDGenerator.getID();
@@ -80,23 +55,29 @@ public class TaxService {
             checkType(taxDTO, type);
 
             taxDTOListTemp.add(taxDTO);
-            totalDTO = countAll(taxDTOListTemp);
-            setReqMap(userItem, requestId, taxDTOListTemp, totalDTO);
-
-
+            prepareSaveData(taxDTO, requestId, userItem, tax, taxDTOListTemp);
         } else {
             Integer type = taxDTO.getTaxCode();
             checkType(taxDTO, type);
             if (reqMap.containsKey(requestId)) {
                 taxDTOListTemp = reqMap.get(requestId);
                 taxDTOListTemp.add(taxDTO);
-                totalDTO = countAll(taxDTOListTemp);
-                setReqMap(userItem, requestId, taxDTOListTemp, totalDTO);
+                prepareSaveData(taxDTO, requestId, userItem, tax, taxDTOListTemp);
             }
-
         }
 
         return userItem;
+    }
+
+    private void prepareSaveData(TaxDTO taxDTO, String requestId, UserItem userItem, Tax tax, List<TaxDTO> taxDTOListTemp) {
+        TotalDTO totalDTO;
+        totalDTO = countAll(taxDTOListTemp);
+        setReqMap(userItem, requestId, taxDTOListTemp, totalDTO);
+        tax.setUserId(requestId);
+        tax.setTaxCode(taxDTO.getTaxCode());
+        tax.setName(taxDTO.getName());
+        tax.setPrice(taxDTO.getPrice());
+        saveTax(tax);
     }
 
     private void setReqMap(UserItem userItem, String requestId, List<TaxDTO> taxDTOListTemp, TotalDTO totalDTO) {
@@ -181,17 +162,8 @@ public class TaxService {
         return grandTotal;
     }
 
-//    public List<TaxDTO> getTaxList(){
-//        List<Tax> taxList = (List) taxRepository.findAll();
-//        return taxList.stream().map(entity -> {
-//            final TaxDTO dto = new TaxDTO();
-//            BeanUtils.copyProperties(entity, dto);
-//            return dto;
-//        }).collect(Collectors.toList());
-//    }
-
-    public List<Tax> getTaxList() {
-        return taxRepository.findAll();
+    public Page<Tax> getTaxList(Pageable pageable) {
+        return taxRepository.findAll(pageable);
     }
 
     private Double countTax(Double price, Integer type) {
