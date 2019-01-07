@@ -1,7 +1,8 @@
 package com.hendisantika.taxcalculator.service;
 
 import com.hendisantika.taxcalculator.domain.Tax;
-import com.hendisantika.taxcalculator.dto.TaxDTO;
+import com.hendisantika.taxcalculator.dto.TaxRequest;
+import com.hendisantika.taxcalculator.dto.TaxResponse;
 import com.hendisantika.taxcalculator.dto.TotalDTO;
 import com.hendisantika.taxcalculator.dto.UserItem;
 import com.hendisantika.taxcalculator.repository.TaxRepository;
@@ -34,7 +35,7 @@ import java.util.Map;
 public class TaxService {
     private static Logger log = LoggerFactory.getLogger(TaxService.class);
 
-    private static Map<String, List<TaxDTO>> reqMap = new HashMap<>();
+    private static Map<String, List<TaxResponse>> reqMap = new HashMap<>();
 
     @Autowired
     TaxRepository taxRepository;
@@ -44,32 +45,31 @@ public class TaxService {
         return taxRepository.save(tax);
     }
 
-    public UserItem addTaxItem(TaxDTO taxDTO, String requestId) {
+    public UserItem addTaxItem(TaxRequest taxRequest, String requestId) {
         UserItem userItem = new UserItem();
-        TotalDTO totalDTO;
         Tax tax = new Tax();
-        List<TaxDTO> taxDTOListTemp = new ArrayList<>();
+        List<TaxResponse> taxDTOListTemp = new ArrayList<>();
         if (requestId == null) {
             requestId = RequestIDGenerator.getID();
-            Integer type = taxDTO.getTaxCode();
-            checkType(taxDTO, type);
+            Integer type = taxRequest.getTaxCode();
+            TaxResponse taxResponse = checkType(taxRequest, type);
 
-            taxDTOListTemp.add(taxDTO);
-            prepareSaveData(taxDTO, requestId, userItem, tax, taxDTOListTemp);
+            taxDTOListTemp.add(taxResponse);
+            prepareSaveData(taxResponse, requestId, userItem, tax, taxDTOListTemp);
         } else {
-            Integer type = taxDTO.getTaxCode();
-            checkType(taxDTO, type);
+            Integer type = taxRequest.getTaxCode();
+            TaxResponse taxResponse = checkType(taxRequest, type);
             if (reqMap.containsKey(requestId)) {
                 taxDTOListTemp = reqMap.get(requestId);
-                taxDTOListTemp.add(taxDTO);
-                prepareSaveData(taxDTO, requestId, userItem, tax, taxDTOListTemp);
+                taxDTOListTemp.add(taxResponse);
+                prepareSaveData(taxResponse, requestId, userItem, tax, taxDTOListTemp);
             }
         }
 
         return userItem;
     }
 
-    private void prepareSaveData(TaxDTO taxDTO, String requestId, UserItem userItem, Tax tax, List<TaxDTO> taxDTOListTemp) {
+    private void prepareSaveData(TaxResponse taxDTO, String requestId, UserItem userItem, Tax tax, List<TaxResponse> taxDTOListTemp) {
         TotalDTO totalDTO;
         totalDTO = countAll(taxDTOListTemp);
         setReqMap(userItem, requestId, taxDTOListTemp, totalDTO);
@@ -80,7 +80,7 @@ public class TaxService {
         saveTax(tax);
     }
 
-    private void setReqMap(UserItem userItem, String requestId, List<TaxDTO> taxDTOListTemp, TotalDTO totalDTO) {
+    private void setReqMap(UserItem userItem, String requestId, List<TaxResponse> taxDTOListTemp, TotalDTO totalDTO) {
         reqMap.put(requestId, taxDTOListTemp);
         reqMap.forEach((k, v) -> log.info("UUID : " + k + " Data : " + v));
         log.info("Jumlah Data --> {}", reqMap.size());
@@ -94,35 +94,46 @@ public class TaxService {
         log.info("User Item --> {}", userItem);
     }
 
-    private void checkType(TaxDTO taxDTO, Integer type) {
+    private TaxResponse checkType(TaxRequest taxRequest, Integer type) {
+        TaxResponse taxResponse = new TaxResponse();
         switch (type) {
             case 1:
-                taxDTO.setId(RequestIDGenerator.getID());
-                taxDTO.setType("Food & Beverage");
-                taxDTO.setRefundable(true);
-                taxDTO.setTax(countTax(taxDTO.getPrice(), taxDTO.getTaxCode()));
-                taxDTO.setAmount(sumAmount(taxDTO.getPrice(), taxDTO.getTax()));
+                taxResponse.setId(RequestIDGenerator.getID());
+                taxResponse.setName(taxRequest.getName());
+                taxResponse.setTaxCode(taxRequest.getTaxCode());
+                taxResponse.setPrice(taxRequest.getPrice());
+                taxResponse.setType("Food & Beverage");
+                taxResponse.setRefundable(true);
+                taxResponse.setTax(countTax(taxRequest.getPrice(), taxRequest.getTaxCode()));
+                taxResponse.setAmount(sumAmount(taxRequest.getPrice(), taxResponse.getTax()));
                 break;
             case 2:
-                taxDTO.setId(RequestIDGenerator.getID());
-                taxDTO.setType("Tobacco");
-                taxDTO.setRefundable(false);
-                taxDTO.setTax(countTax(taxDTO.getPrice(), taxDTO.getTaxCode()));
-                taxDTO.setAmount(sumAmount(taxDTO.getPrice(), taxDTO.getTax()));
+                taxResponse.setId(RequestIDGenerator.getID());
+                taxResponse.setName(taxRequest.getName());
+                taxResponse.setTaxCode(taxRequest.getTaxCode());
+                taxResponse.setPrice(taxRequest.getPrice());
+                taxResponse.setType("Tobacco");
+                taxResponse.setRefundable(false);
+                taxResponse.setTax(countTax(taxRequest.getPrice(), taxRequest.getTaxCode()));
+                taxResponse.setAmount(sumAmount(taxRequest.getPrice(), taxResponse.getTax()));
                 break;
 
             case 3:
-                taxDTO.setId(RequestIDGenerator.getID());
-                taxDTO.setType("Entertainment");
-                taxDTO.setRefundable(false);
-                taxDTO.setTax(countTax(taxDTO.getPrice(), taxDTO.getTaxCode()));
-                taxDTO.setAmount(sumAmount(taxDTO.getPrice(), taxDTO.getTax()));
+                taxResponse.setId(RequestIDGenerator.getID());
+                taxResponse.setName(taxRequest.getName());
+                taxResponse.setTaxCode(taxRequest.getTaxCode());
+                taxResponse.setPrice(taxRequest.getPrice());
+                taxResponse.setType("Entertainment");
+                taxResponse.setRefundable(false);
+                taxResponse.setTax(countTax(taxRequest.getPrice(), taxRequest.getTaxCode()));
+                taxResponse.setAmount(sumAmount(taxRequest.getPrice(), taxResponse.getTax()));
                 break;
         }
+        return taxResponse;
     }
 
 
-    private TotalDTO countAll(List<TaxDTO> taxDTOList) {
+    private TotalDTO countAll(List<TaxResponse> taxDTOList) {
         TotalDTO totalDTO = new TotalDTO();
         totalDTO.setPriceSubTotal(calculatePriceSubTotal(taxDTOList));
         totalDTO.setTaxSubTotal(calculateTaxSubTotal(taxDTOList));
@@ -137,26 +148,26 @@ public class TaxService {
         return price + tax;
     }
 
-    private Double calculatePriceSubTotal(List<TaxDTO> taxDTOList) {
+    private Double calculatePriceSubTotal(List<TaxResponse> taxDTOList) {
         Double priceSubTotal = 0.0;
-        for (TaxDTO temp : taxDTOList) {
+        for (TaxResponse temp : taxDTOList) {
             priceSubTotal = priceSubTotal + temp.getAmount();
         }
         return priceSubTotal;
     }
 
 
-    private Double calculateTaxSubTotal(List<TaxDTO> taxDTOList) {
+    private Double calculateTaxSubTotal(List<TaxResponse> taxDTOList) {
         Double taxSubTotal = 0.0;
-        for (TaxDTO temp : taxDTOList) {
+        for (TaxResponse temp : taxDTOList) {
             taxSubTotal = taxSubTotal + temp.getTax();
         }
         return taxSubTotal;
     }
 
-    private Double calculateGrandTotal(List<TaxDTO> taxDTOList) {
+    private Double calculateGrandTotal(List<TaxResponse> taxDTOList) {
         Double grandTotal = 0.0;
-        for (TaxDTO temp : taxDTOList) {
+        for (TaxResponse temp : taxDTOList) {
             grandTotal = grandTotal + temp.getPrice();
         }
         return grandTotal;

@@ -17,7 +17,7 @@ import java.io.Serializable;
  * To change this template use File | Settings | File Templates.
  */
 @Data
-public class TaxDTO implements Serializable {
+public class TaxResponse implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id

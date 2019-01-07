@@ -1,9 +1,11 @@
 package com.hendisantika.taxcalculator.controller;
 
 import com.hendisantika.taxcalculator.domain.Tax;
-import com.hendisantika.taxcalculator.dto.TaxDTO;
+import com.hendisantika.taxcalculator.dto.TaxRequest;
 import com.hendisantika.taxcalculator.dto.UserItem;
 import com.hendisantika.taxcalculator.service.TaxService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("tax")
+@Api(value = "tax-controller", description = "Endpoints for handling and managing user items tax related operations", tags = "/tax")
 public class TaxController {
     private static Logger logger = LoggerFactory.getLogger(TaxController.class);
 
@@ -30,13 +33,15 @@ public class TaxController {
     TaxService taxService;
 
     @GetMapping
+    @ApiOperation(value = "Get All Tax List", response = Tax.class)
     Page<Tax> getTaxList(Pageable pageable) {
         return taxService.getTaxList(pageable);
     }
 
-    @GetMapping("add")
-    UserItem addTaxItemList(@RequestBody TaxDTO taxDTO, @RequestParam(value = "requestId", required = false) final String requestId) {
-        return taxService.addTaxItem(taxDTO, requestId);
+    @PostMapping("add")
+    @ApiOperation(value = "Add new Tax Item List", response = UserItem.class)
+    UserItem addTaxItemList(@RequestBody TaxRequest taxRequest, @RequestParam(value = "requestId", required = false) final String requestId) {
+        return taxService.addTaxItem(taxRequest, requestId);
     }
 
 }

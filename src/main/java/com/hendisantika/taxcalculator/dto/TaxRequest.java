@@ -2,9 +2,7 @@ package com.hendisantika.taxcalculator.dto;
 
 import lombok.Data;
 
-import javax.persistence.Id;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,18 +10,18 @@ import java.util.List;
  * User: hendisantika
  * Email: hendisantika@gmail.com
  * Telegram : @hendisantika34
- * Date: 2019-01-06
- * Time: 09:49
+ * Date: 2019-01-04
+ * Time: 05:34
  * To change this template use File | Settings | File Templates.
  */
-
 @Data
-public class UserItem {
+public class TaxRequest implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Id
-    private String id;
-    private String userId;
-    List<TaxResponse> items = new ArrayList<>();
-    TotalDTO totalDTO;
+    private String name;
+
+    private Integer taxCode;
+
+    private Double price;
+
 }
