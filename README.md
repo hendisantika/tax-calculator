@@ -7,7 +7,14 @@ Simple Tax Calculator using Spring Boot MySQL Docker Compose
 1. Clone this project by this command : `git clone https://github.com/hendisantika/tax-calculator.git`
 2. Go to folder --> `cd tax-calculator`
 3. Run this project with Maven Wrapper --> `./mvnw clean spring-boot:run`
-4. Open POSTMAN and see the following screen shot:
+4. Open Swagger UI Dashboard on this link http://localhost:8080/swagger-ui.html and see the following screen shot:
+
+![Swagger UI](img/SwaggerUI.png "Swagger UI")
+
+For the first time request just
+
+
+
 
 
 
