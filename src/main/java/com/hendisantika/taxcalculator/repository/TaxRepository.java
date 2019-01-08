@@ -20,4 +20,6 @@ public interface TaxRepository extends JpaRepository<Tax, Long> {
     Tax save(Tax tax);
 
     Page<Tax> findAll(Pageable pageable);
+
+    Tax findByTaxCode(Integer taxCode);
 }
