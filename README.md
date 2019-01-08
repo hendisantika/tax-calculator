@@ -44,7 +44,18 @@ Get All Tax List
 
    `docker images`
 
-4. Running the built docker image
+4. Create a docker container for MySQL
+   ```
+   docker run -d \
+         -p 2012:3306 \
+        --name mysql-docker-container \
+        -e MYSQL_ROOT_PASSWORD=root123 \
+        -e MYSQL_DATABASE=taxDB \
+        -e MYSQL_USER=app_user \
+        -e MYSQL_PASSWORD=test123 \
+           mysql:latest
+   ```
+5. Running the built docker image
 
    Now we need to run the built docker image of our spring boot application. Since this application requires to connect with MySQL server, we need to make sure that MySQL server is up and running.
 
@@ -53,23 +64,23 @@ Get All Tax List
    `docker ps`
 
 
-5. Link with MySQL Container.
+6. Link with MySQL Container.
 
    Once the mysql container is up and running, you can run your spring boot application image on container with following command.  You need to link your spring boot application with mysql container.
 
-   `docker run -t --name tax-calculator-container --link mysql-docker-container:mysql -p 8087:8080 tax-calculator`
+   `docker run -d -t --name tax-calculator --link mysql-docker-container:mysql -p 8087:8080 tax-calculator`
 
-6. Now we can check and verify whether both containers (mysql and spring boot application containers) are up and running.
+7. Now we can check and verify whether both containers (mysql and spring boot application containers) are up and running.
 
    `docker ps`
 
-7. Verify containers are linked properly
+8. Verify containers are linked properly
 
    To verify whether the containers are linked properly, you can get into the application container (tax-calculator-container) and see the content of the /etc/hosts file.
 
    **login to container with bash mode**
 
-   `docker exec -it tax-calculator-container bash`
-   tax-calculator-container is the name of the container that we need to access.  bash param says that we need the bash access.
+   `docker exec -it tax-calculator bash`
+   tax-calculator is the name of the container that we need to access.  bash param says that we need the bash access.
 
    see the content of /etc/hosts ( cat /etc/hosts )
