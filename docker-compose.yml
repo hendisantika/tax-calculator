@@ -10,7 +10,7 @@ services:
       - MYSQL_PASSWORD=test123
     volumes:
       - /data/mysql
-  tax-calculator:
+  tax-calculator-container:
     image: tax-calculator-image
     build:
       context: ./

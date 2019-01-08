@@ -34,8 +34,8 @@ public class TaxController {
 
     @GetMapping
     @ApiOperation(value = "Get All Tax List", response = Tax.class)
-    Page<Tax> getTaxList(Pageable pageable) {
-        return taxService.getTaxList(pageable);
+    Page<TaxRequest> getTaxList(Pageable pageable) {
+        return taxService.getAllTaxItems(pageable);
     }
 
     @PostMapping("add")

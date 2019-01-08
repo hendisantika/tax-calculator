@@ -1,6 +1,8 @@
 package com.hendisantika.taxcalculator.repository;
 
 import com.hendisantika.taxcalculator.domain.Tax;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -16,4 +18,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface TaxRepository extends JpaRepository<Tax, Long> {
 
     Tax save(Tax tax);
+
+    Page<Tax> findAll(Pageable pageable);
 }

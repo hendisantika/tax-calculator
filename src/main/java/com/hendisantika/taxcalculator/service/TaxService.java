@@ -9,8 +9,10 @@ import com.hendisantika.taxcalculator.repository.TaxRepository;
 import com.hendisantika.taxcalculator.utils.RequestIDGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by IntelliJ IDEA.
@@ -175,6 +178,22 @@ public class TaxService {
 
     public Page<Tax> getTaxList(Pageable pageable) {
         return taxRepository.findAll(pageable);
+    }
+
+    public Page<TaxRequest> getAllTaxItems(Pageable pageable) {
+        Page<Tax> taxes = taxRepository.findAll(pageable);
+        Page<TaxRequest> result = new PageImpl<>(new ArrayList<>(), pageable, 0);
+        final List<Tax> content = taxes.getContent();
+        final List<TaxRequest> dtoList = content.stream().map(entity -> {
+            final TaxRequest taxRequest = new TaxRequest();
+            BeanUtils.copyProperties(entity, taxRequest);
+            return taxRequest;
+        }).collect(Collectors.toList());
+        if (!dtoList.isEmpty()) {
+            result = new PageImpl<>(dtoList, pageable, taxes.getTotalElements());
+        }
+
+        return result;
     }
 
     private Double countTax(Double price, Integer type) {
