@@ -1,6 +1,7 @@
 package com.hendisantika.taxcalculator.repository;
 
 import com.hendisantika.taxcalculator.domain.Tax;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class TaxRepositoryTest {
     public void whenFindByTaxCodeThenReturnTaxItems() {
         // given
         Tax tax = new Tax();
-        tax.setTaxId(10L);
+        tax.setTaxId(1L);
         tax.setUserId("7be33735-9215-4d49-b669-960b9401e9ee");
         tax.setName("Marlboro");
         tax.setTaxCode(2);
@@ -52,5 +53,30 @@ public class TaxRepositoryTest {
         // then
         assertThat(found.getTaxCode())
                 .isEqualTo(tax.getTaxCode());
+    }
+
+    @Test
+    public void saveTaxData() {
+        // given
+        Tax tax = new Tax();
+        tax.setTaxId(2L);
+        tax.setUserId("7be33735-9215-4d49-b669-960b9401e9ee");
+        tax.setName("Movie");
+        tax.setTaxCode(3);
+        tax.setPrice(120.0);
+        tax.setCreated(new Date());
+
+        entityManager.merge(tax);
+        entityManager.flush();
+
+        // when
+        Tax found = taxRepository.findByTaxCode(tax.getTaxCode());
+
+        // then
+        assertThat(found.getTaxCode())
+                .isEqualTo(tax.getTaxCode());
+        Assert.assertNotNull(tax.getTaxId());
+        Assert.assertNotNull(tax.getName());
+        Assert.assertEquals("Movie", tax.getName());
     }
 }
