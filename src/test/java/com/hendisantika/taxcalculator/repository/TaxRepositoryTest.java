@@ -79,4 +79,27 @@ public class TaxRepositoryTest {
         Assert.assertNotNull(tax.getName());
         Assert.assertEquals("Movie", tax.getName());
     }
+
+//    @Test
+//    public void testFindAll() {
+//        Page<Tax> findAll(Pageable pageable);
+//        List<Tax> expected = new ArrayList<>();
+//        Page foundPage = new PageImpl<>(expected);
+//
+//        when(personRepositoryMock.findAll(any(Predicate.class), any(Pageable.class))).thenReturn(foundPage);
+//
+//        List<Person> actual = repository.findPersonsForPage(SEARCH_TERM, PAGE_INDEX);
+//
+//        ArgumentCaptor<Pageable> pageSpecificationArgument = ArgumentCaptor.forClass(Pageable.class);
+//        verify(personRepositoryMock, times(1)).findAll(any(Predicate.class), pageSpecificationArgument.capture());
+//        verifyNoMoreInteractions(personRepositoryMock);
+//
+//        Pageable pageSpecification = pageSpecificationArgument.getValue();
+//
+//        assertEquals(PAGE_INDEX, pageSpecification.getPageNumber());
+//        assertEquals(PaginatingPersonRepositoryImpl.NUMBER_OF_PERSONS_PER_PAGE, pageSpecification.getPageSize());
+//        assertEquals(Sort.Direction.ASC, pageSpecification.getSort().getOrderFor(PROPERTY_LASTNAME).getDirection());
+//
+//        assertEquals(expected, actual);
+//    }
 }

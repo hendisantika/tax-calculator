@@ -212,4 +212,8 @@ public class TaxService {
         return result;
     }
 
+    public Tax findByTaxCode(Integer taxCode) {
+        return taxRepository.findByTaxCode(taxCode);
+    }
+
 }
