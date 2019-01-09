@@ -43,16 +43,40 @@ Get All Tax List
 
    ![Swagger UI](img/SwaggerUI2.png "Swagger UI")
 
-   For the first time request just add the tax json request :
+4. For the first time request just add the tax json request :
 
    ![First Tax Request](img/add1b.png "First Tax Request")
 
-   For next request We need requestId to differentiate whose session user is this and whose item list is this.
+5. For next request We need requestId to differentiate whose session user is this and whose item list is this.
 
    ![Second Tax Request](img/add2b.png "Second Tax Request")
 
    ![Third Tax Request](img/add3b.png "Third Tax Request")
 
-   Get All Tax List
+6. Get All Tax List
 
    ![Get All Tax List](img/list2.png "Get All Tax List")
+
+Sample JSON Request :
+```
+{
+	"name" : "Lucky Stretch",
+	"taxCode" : 2,
+	"price" : 1000
+}
+
+{
+	"name" : "Big Mac",
+	"taxCode" : 1,
+	"price" : 1000
+}
+
+{
+	"name" : "Movie",
+	"taxCode" : 3,
+	"price" : 150
+}
+```
+
+
+
