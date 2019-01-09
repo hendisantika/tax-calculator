@@ -21,11 +21,11 @@ For next request We need requestId to differentiate whose session user is this a
 
 ![Second Tax Request](img/add2.png "Second Tax Request")
 
-![Third Tax Request](img/add3.png "Third Tax Request")
+![Third Tax Request](img/list.png "Third Tax Request")
 
 Get All Tax List
 
-![Get All Tax List](img/add3.png "Get All Tax List")
+![Get All Tax List](img/list.png "Get All Tax List")
 
 ### Things to do to run with Docker Compose :
 
@@ -41,18 +41,18 @@ Get All Tax List
 
 3. Open Swagger UI Dashboard on this link http://localhost:8087/swagger-ui.html and see the following screen shot:
 
-   ![Swagger UI](img/SwaggerUI.png "Swagger UI")
+   ![Swagger UI](img/SwaggerUI2.png "Swagger UI")
 
    For the first time request just add the tax json request :
 
-   ![First Tax Request](img/add1.png "First Tax Request")
+   ![First Tax Request](img/add1b.png "First Tax Request")
 
    For next request We need requestId to differentiate whose session user is this and whose item list is this.
 
-   ![Second Tax Request](img/add2.png "Second Tax Request")
+   ![Second Tax Request](img/add2b.png "Second Tax Request")
 
-   ![Third Tax Request](img/add3.png "Third Tax Request")
+   ![Third Tax Request](img/add3b.png "Third Tax Request")
 
    Get All Tax List
 
-   ![Get All Tax List](img/add3.png "Get All Tax List")
+   ![Get All Tax List](img/list2.png "Get All Tax List")
