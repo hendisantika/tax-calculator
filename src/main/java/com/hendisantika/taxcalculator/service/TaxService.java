@@ -180,14 +180,14 @@ public class TaxService {
         return taxRepository.findAll(pageable);
     }
 
-    public Page<TaxRequest> getAllTaxItems(Pageable pageable) {
+    public Page<Tax> getAllTaxItems(Pageable pageable) {
         Page<Tax> taxes = taxRepository.findAll(pageable);
-        Page<TaxRequest> result = new PageImpl<>(new ArrayList<>(), pageable, 0);
+        Page<Tax> result = new PageImpl<>(new ArrayList<>(), pageable, 0);
         final List<Tax> content = taxes.getContent();
-        final List<TaxRequest> dtoList = content.stream().map(entity -> {
-            final TaxRequest taxRequest = new TaxRequest();
-            BeanUtils.copyProperties(entity, taxRequest);
-            return taxRequest;
+        final List<Tax> dtoList = content.stream().map(entity -> {
+            final Tax tax = new Tax();
+            BeanUtils.copyProperties(entity, tax);
+            return tax;
         }).collect(Collectors.toList());
         if (!dtoList.isEmpty()) {
             result = new PageImpl<>(dtoList, pageable, taxes.getTotalElements());

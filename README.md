@@ -27,7 +27,6 @@ Get All Tax List
 
 ![Get All Tax List](img/add3.png "Get All Tax List")
 
-
 ### Things to do to run with Docker Compose :
 
 1. Building the docker image from project
@@ -40,7 +39,7 @@ Get All Tax List
 
    `docker-compose up`
 
-3. Open Swagger UI Dashboard on this link http://localhost:8080/swagger-ui.html and see the following screen shot:
+3. Open Swagger UI Dashboard on this link http://localhost:8087/swagger-ui.html and see the following screen shot:
 
    ![Swagger UI](img/SwaggerUI.png "Swagger UI")
 

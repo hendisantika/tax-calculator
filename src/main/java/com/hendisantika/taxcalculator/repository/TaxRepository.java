@@ -4,6 +4,7 @@ import com.hendisantika.taxcalculator.domain.Tax;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,7 +16,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * Time: 05:36
  * To change this template use File | Settings | File Templates.
  */
-public interface TaxRepository extends JpaRepository<Tax, Long> {
+public interface TaxRepository extends JpaRepository<Tax, Long>, PagingAndSortingRepository<Tax, Long> {
 
     Tax save(Tax tax);
 

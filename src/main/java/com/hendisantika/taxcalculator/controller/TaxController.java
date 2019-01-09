@@ -4,8 +4,7 @@ import com.hendisantika.taxcalculator.domain.Tax;
 import com.hendisantika.taxcalculator.dto.TaxRequest;
 import com.hendisantika.taxcalculator.dto.UserItem;
 import com.hendisantika.taxcalculator.service.TaxService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,20 @@ public class TaxController {
 
     @GetMapping
     @ApiOperation(value = "Get All Tax List", response = Tax.class)
-    Page<TaxRequest> getTaxList(Pageable pageable) {
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 200, message = "OK"),
+                    @ApiResponse(code = 404, message = "Not Found"),
+                    @ApiResponse(code = 500, message = "Internal Error"
+                    )}
+    )
+    @ApiImplicitParams(
+            {
+                    @ApiImplicitParam(name = "page", dataType = "int", paramType = "query", value = "Page Number"),
+                    @ApiImplicitParam(name = "size", dataType = "int", paramType = "query", value = "Page Size")
+            }
+    )
+    Page<Tax> getTaxList(Pageable pageable) {
         return taxService.getAllTaxItems(pageable);
     }
 
