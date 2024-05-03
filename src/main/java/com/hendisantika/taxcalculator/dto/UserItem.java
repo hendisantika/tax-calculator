@@ -1,8 +1,8 @@
 package com.hendisantika.taxcalculator.dto;
 
+import jakarta.persistence.Id;
 import lombok.Data;
 
-import javax.persistence.Id;
 import java.util.ArrayList;
 import java.util.List;
 

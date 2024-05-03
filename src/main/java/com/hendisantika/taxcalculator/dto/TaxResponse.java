@@ -1,9 +1,9 @@
 package com.hendisantika.taxcalculator.dto;
 
+import jakarta.persistence.Id;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Id;
 import java.io.Serializable;
 
 /**
