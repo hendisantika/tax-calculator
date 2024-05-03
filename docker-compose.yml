@@ -1,15 +1,14 @@
-version: '3'
-
+version: '3.9'
 services:
   mysql-docker-container:
-    image: mysql:latest
+    image: mysql:8.4.0
     environment:
       - MYSQL_ROOT_PASSWORD=root123
       - MYSQL_DATABASE=taxDB
       - MYSQL_USER=app_user
       - MYSQL_PASSWORD=test123
     volumes:
-      - /data/mysql
+      - ./data/mysql:/var/lib/mysql
   tax-calculator-container:
     image: tax-calculator-image
     build:
@@ -18,6 +17,6 @@ services:
     depends_on:
       - mysql-docker-container
     ports:
-      - 8087:8080
+      - "8080:8080"
     volumes:
       - /data/tax-calculator

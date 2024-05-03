@@ -1,4 +1,4 @@
-FROM java:8
+FROM bellsoft/liberica-openjdk-debian:21
 LABEL maintainer="hendisantika@yahoo.co.id"
 VOLUME /tmp
 EXPOSE 8080
